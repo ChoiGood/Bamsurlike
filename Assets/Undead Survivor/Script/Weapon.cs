@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 //풀 매니저에서 받아온 근접무기들을 장면 안에서 모양새있게 관리해주는 클래스..
 public class Weapon : MonoBehaviour
@@ -16,13 +17,9 @@ public class Weapon : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponentInParent<Player>();
+        player = GameManager.instance.player;
     }
 
-    void Start()
-    {
-        Init();
-    }
     void Update()
     {
         // Update 로직도 switch 문 활용하여 무기마다 로직 실행
@@ -55,10 +52,35 @@ public class Weapon : MonoBehaviour
 
         if(id == 0) // 속성 변경과 동시에 근접무기의 경우 배치도 필요하니 함수 호출
             Batch();
+
+        player.BroadcastMessage("ApplyGear" , SendMessageOptions.DontRequireReceiver);
     }
 
-    public void Init()
+    public void Init(ItemData data)
     {
+        // Basic Set
+        name = "Weapon " + data.itemId;
+        transform.parent = player.transform;
+        transform.localPosition = Vector3.zero;
+
+        // Property Set
+        id = data.itemId;
+        damage = data.baseDamage;
+        count = data.baseCount;
+
+        for(int index=0; index < GameManager.instance.pool.prefabs.Length; index++)
+        {
+            if(data.projectile == GameManager.instance.pool.prefabs[index])
+            {
+                prefabId = index;
+                break;
+            }
+        }
+        // 왜 이렇게 힘들게 하느냐??
+        // 물론 데이터에서프리펩 숫자로 넣어도 되기는한다
+        // 하지만 그에 맞춰 풀매니저도 똑같이 맞춰야하기때문에
+        // ## 스크립트블 오브젝트의 독립성을 위해서 인덱스가 아닌 프리펩으로 설정!!
+
         switch (id)
         {
             case 0:
@@ -71,6 +93,15 @@ public class Weapon : MonoBehaviour
                 break;
 
         }
+
+        // Hand Set
+        Hand hand = player.hands[(int)data.itemType];
+        hand.spriter.sprite = data.hand;
+        hand.gameObject.SetActive(true);
+
+
+        // BroadcastMessage : 특정함수호출을 모든 자식에게 방송하는 함수
+        player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
 
     // 생성된 무기를 배치하는 함수
