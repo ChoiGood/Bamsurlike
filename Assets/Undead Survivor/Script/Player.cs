@@ -24,8 +24,12 @@ public class Player : MonoBehaviour
     }
 
     
+
     void FixedUpdate()
     {
+        if (!GameManager.instance.isLive)
+            return;
+
         /*
         // 1. »˚¿ª ¡ÿ¥Ÿ
         rigid.AddForce(inputVec);
@@ -47,6 +51,9 @@ public class Player : MonoBehaviour
 
     void LateUpdate()
     {
+        if (!GameManager.instance.isLive)
+            return;
+
         anim.SetFloat("Speed", inputVec.magnitude);
 
         if (inputVec.x != 0)
