@@ -139,7 +139,7 @@ public class Weapon : MonoBehaviour
 
 
             // bullet 컴포넌트 접근하여 속성 초기화 함수 호출
-            bullet.GetComponent<Bullet>().Init(damage, -1, Vector3.zero); // -1 is Infinity Per.   
+            bullet.GetComponent<Bullet>().Init(damage, -100, Vector3.zero); // -100 is Infinity Per.   
         }
 
     }
