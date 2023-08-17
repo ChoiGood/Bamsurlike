@@ -89,6 +89,7 @@ public class Enemy : MonoBehaviour
             // .. Live, Hit Action
             // 애니메이션(넉백)
             anim.SetTrigger("Hit");
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.Hit);
         }
         else
         {
@@ -99,6 +100,9 @@ public class Enemy : MonoBehaviour
             anim.SetBool("Dead",true);
             GameManager.instance.kill++;
             GameManager.instance.GetExp();
+            
+            if(GameManager.instance.isLive)
+                AudioManager.instance.PlaySfx(AudioManager.Sfx.Dead);
         }
 
     }
