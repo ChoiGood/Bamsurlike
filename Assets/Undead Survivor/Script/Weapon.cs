@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 //풀 매니저에서 받아온 근접무기들을 장면 안에서 모양새있게 관리해주는 클래스..
 public class Weapon : MonoBehaviour
